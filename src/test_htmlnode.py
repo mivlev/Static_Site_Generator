@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_eq(self):
@@ -26,5 +26,28 @@ class TestHTMLNode(unittest.TestCase):
             node.to_html()
     
 
+class TestLeafNode(unittest.TestCase):
+    def test_eq(self):
+        node = LeafNode(tag="div", value="This is a div", props={"class": "container"})
+        node2 = LeafNode(tag="div", value="This is a div", props={"class": "container"})
+        self.assertEqual(node, node2)
+    
+    def test_to_html(self):
+        node = LeafNode(tag="div", value="This is a div", props={"class": "container"})
+        self.assertEqual(node.to_html(), "<div class=\"container\">This is a div</div>")
+    
+    def test_to_html_no_value(self):
+        node = LeafNode(tag="div", value=None, props={"class": "container"})
+        with self.assertRaises(ValueError):
+            node.to_html()
+    
+    def test_to_html_no_tag(self):
+        node = LeafNode(tag=None, value="This is a div", props={"class": "container"})
+        self.assertEqual(node.to_html(), "This is a div")
+    
+    def test_to_html_no_props(self):
+        node = LeafNode(tag="div", value="This is a div", props=None)
+        self.assertEqual(node.to_html(), "<div>This is a div</div>")
+    
 if __name__ == "__main__":
     unittest.main()
